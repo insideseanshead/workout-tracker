@@ -1,3 +1,6 @@
+const nameWorkout = document.getElementById("nameWorkout")
+const workoutDiv = document.getElementById("workOutDiv")
+
 // submit function
 // submit workout name
 document.querySelector("#workoutForm").addEventListener("submit", function(event){
@@ -28,37 +31,50 @@ document.querySelector("#workoutForm").addEventListener("submit", function(event
 })
 
 //submit exercise info
-document.querySelector("#exerciseForm").addEventListener("submit", function(event){
-    event.preventDefault();
-    // find form id and table name
-    let name = document.querySelector("#exerciseForm input[name=name]").value;
-    let type = document.querySelector("#exerciseForm input[name=type]").value;
-    let sets = document.querySelector("#exerciseForm input[name=sets]").value;
-    let reps = document.querySelector("#exerciseForm input[name=reps]").value;
-    let duration = document.querySelector("#exerciseForm input[name=duration]").value;
-    fetch("/exercise", {
-        method: "post",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({name,type,sets,reps,duration})
-    }).then(
-        function(res) {
-            console.log("something")
-            if(!res.ok){
-                throw res
-            }
-            console.log("something else")
-            return res.json()
-        }
-    ).then(
-        function(res){
-            console.log(res)
-        }
-    ).catch(function(err){
-        console.error(err)
-    })
-})
+// document.querySelector("#exerciseForm").addEventListener("submit", function(event){
+//     event.preventDefault();
+//     // find form id and table name
+//     let name = document.querySelector("#exerciseForm input[name=name]").value;
+//     let type = document.querySelector("#exerciseForm input[name=type]").value;
+//     let sets = document.querySelector("#exerciseForm input[name=sets]").value;
+//     let reps = document.querySelector("#exerciseForm input[name=reps]").value;
+//     let duration = document.querySelector("#exerciseForm input[name=duration]").value;
+//     fetch("/exercise", {
+//         method: "post",
+//         headers:{"Content-Type":"application/json"},
+//         body: JSON.stringify({name,type,sets,reps,duration})
+//     }).then(
+//         function(res) {
+//             console.log("something")
+//             if(!res.ok){
+//                 throw res
+//             }
+//             console.log("something else")
+//             return res.json()
+//         }
+//     ).then(
+//         function(res){
+//             console.log(res)
+//         }
+//     ).catch(function(err){
+//         console.error(err)
+//     })
+// })
 
 // Take submit workout name variable and create a new card with form for exercisses to add to workout.
+// Load workout and render to screen
+function getWorkout() {
+    $("#workOutDiv").empty();
+    $.getJSON('/workout', function(data) {
+        for (var i = 0; i < data.length; i++){
+            $('workOutDiv').append("<h3>" + data[i].name + "</h3>")
+        }
+       
+    })
+}
+
+getWorkout()
+
 /* <h2>Exercises</h2>
         <input type="text" name="name" placeholder="Exercise Name">
         <input type="text" name="type" placeholder="Exercise type">
