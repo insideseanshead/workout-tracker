@@ -1,34 +1,35 @@
-const nameWorkout = document.getElementById("nameWorkout")
-const workoutDiv = document.getElementById("workOutDiv")
+const nameWorkout = document.getElementById("nameWorkout");
+const workoutDiv = document.getElementById("workOutDiv");
 
 // submit function
 // submit workout name
-document.querySelector("#workoutForm").addEventListener("submit", function(event){
+document
+  .querySelector("#workoutForm")
+  .addEventListener("submit", function (event) {
     event.preventDefault();
     // find form id and table name
-    let name = document.querySelector("#workoutForm input[name=name]").value
+    let name = document.querySelector("#workoutForm input[name=name]").value;
     // equivilent to ajax making http request to route workout, method post, json of the object json
     fetch("/workout", {
-        method: "post",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({name})
-    }).then(
-        function(res) {
-            console.log("something")
-            if(!res.ok){
-                throw res
-            }
-            console.log("something else")
-            return res.json()
-        }
-    ).then(
-        function(res){
-            console.log(res)
-        }
-    ).catch(function(err){
-        console.error(err)
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name }),
     })
-})
+      .then(function (res) {
+        console.log("something");
+        if (!res.ok) {
+          throw res;
+        }
+        console.log("something else");
+        return res.json();
+      })
+      .then(function (res) {
+        console.log(res);
+      })
+      .catch(function (err) {
+        console.error(err);
+      });
+  });
 
 //submit exercise info
 // document.querySelector("#exerciseForm").addEventListener("submit", function(event){
@@ -64,24 +65,27 @@ document.querySelector("#workoutForm").addEventListener("submit", function(event
 // Take submit workout name variable and create a new card with form for exercisses to add to workout.
 // Load workout and render to screen
 function getWorkout() {
-    $("#workOutDiv").empty();
-    $.getJSON('/workout', function(data) {
-        for (var i = 0; i < data.length; i++){
-            $('workOutDiv').append("<h3>" + data[i].name + "</h3>")
-        }
-       
-    })
+  $("#workOutDiv").empty();
+  $.getJSON("/workout", function (data) {
+    for (var i = 0; i < data.length; i++) {
+      $("#workOutDiv").append(
+        `<form class="workoutRoutine"><h3>${data[i].name}</h3>
+            <br />
+            <input type="text" name="name" placeholder="Exercise Name">
+            <input type="text" name="type" placeholder="Exercise type">
+            <input type="number" name="sets" placeholder="Number of Sets">
+            <input type="number" name="reps" placeholder="Number of Reps">
+            <input type="number" name="duration" placeholder="Exercise Duration">
+            <input type="submit">
+        </form>
+        <div class = "exerciseList" id="routine"`
+      );
+    }
+  });
 }
 
-getWorkout()
+getWorkout();
 
-/* <h2>Exercises</h2>
-        <input type="text" name="name" placeholder="Exercise Name">
-        <input type="text" name="type" placeholder="Exercise type">
-        <input type="number" name="sets" placeholder="Number of Sets">
-        <input type="number" name="reps" placeholder="Number of Reps">
-        <input type="number" name="duration" placeholder="Exercise Duration">
-        <input type="submit">
-    </form> */
+
 
 // take exercise info and add to card within workout.
