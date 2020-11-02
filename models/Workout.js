@@ -1,3 +1,4 @@
+//create schema for workout collection
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;

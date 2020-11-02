@@ -17,13 +17,13 @@ app.use(express.static("public"));
 
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workoutdb", { useNewUrlParser: true });
 
-db.Workout.create({ name: "Test Case" })
-  .then(dbworkout => {
-    console.log(dbworkout);
-  })
-  .catch(({ message }) => {
-    console.log(message);
-  });
+// db.Workout.create({ name: "Test Case" })
+//   .then(dbworkout => {
+//     console.log(dbworkout);
+//   })
+//   .catch(({ message }) => {
+//     console.log(message);
+//   });
 
   app.get("/workout", (req, res) => {
     db.Workout.find({})
@@ -45,7 +45,37 @@ db.Workout.create({ name: "Test Case" })
       });
   });
 
-  
+  app.post("/workout", ({ body }, res) => {
+    db.Workout.create(body)
+    .then(dbworkout => {
+      res.json(dbworkout);
+    })
+    .catch(err => {
+      res.status(400).json(err);
+    });
+  })
+
+  // app.post("/submit", ({ body }, res) => {
+  //   db.Note.create(body)
+  //     .then(({ _id }) => db.User.findOneAndUpdate({}, { $push: { notes: _id } }, { new: true }))
+  //     .then(dbUser => {
+  //       res.json(dbUser);
+  //     })
+  //     .catch(err => {
+  //       res.json(err);
+  //     });
+  // });
+
+  app.post("/exercise", ({ body }, res) => {
+    db.Exercise.create(body)
+    .then(({ _id }) => db.Workout.findOneAndUpdate({}, { $push: { exercise: _id } }, { new: true }))
+    .then(dbexercise => {
+      res.json(dbexercise);
+    })
+    .catch(err => {
+      res.json(err);
+    });
+  })
 
 // Start the server
 app.listen(PORT, () => {
